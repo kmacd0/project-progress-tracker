@@ -21,6 +21,7 @@ export class ProgressNotes {
   });
 
   progressNote = 'Initial progress note';
+  projectCodeNotFound = false;
 
   codeMap = new Map<string, string>([
     ['PPT101', 'Project Progress Tracker'],
@@ -32,7 +33,7 @@ export class ProgressNotes {
   updateProjectName(): void {
     const enteredCode: string | null = this.progressNotesForm.controls.projectCode.value;
 
-    if (enteredCode !== null && enteredCode !== '') {
+    if (enteredCode !== null && enteredCode.trim() !== '') {
       const formattedCode: string = enteredCode.trim().toUpperCase();
 
       if (this.codeMap.has(formattedCode)) {
@@ -41,9 +42,14 @@ export class ProgressNotes {
         if (matchedProjectName !== undefined) {
           this.progressNotesForm.controls.projectName.setValue(matchedProjectName);
         }
+        this.projectCodeNotFound = false;
       } else {
-        this.progressNotesForm.controls.projectName.setValue('Project code not found');
+        this.progressNotesForm.controls.projectName.setValue('');
+        this.projectCodeNotFound = true;
       }
+    } else {
+      this.progressNotesForm.controls.projectName.setValue('');
+      this.projectCodeNotFound = false;
     }
   }
 }
